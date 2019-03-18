@@ -49,24 +49,13 @@ rm: ## delete applied resources
 namespace: ## create the kubernetes namespace
 	kubectl describe namespace $(KUBE_NAMESPACE) || kubectl create namespace $(KUBE_NAMESPACE)
 
-# ACLs must be applied to the default role so that configmaps can be accessed
-tiller-acls: namespace
-	KUBE_NAMESPACE=$(KUBE_NAMESPACE) \
-	 envsubst < tiller-acls.yml | kubectl apply -n $(KUBE_NAMESPACE) -f -
-
-launch-tiller: tiller-acls ## launch the helm tiller component
-	helm init --service-account tiller \
-	  --tiller-namespace $(KUBE_NAMESPACE) \
-	  --upgrade
-
-deploy: ## deploy the helm chart
-	@helm install --name $(HELM_RELEASE) \
+deploy: namespace  ## deploy the helm chart
+	@helm template chart/ --name $(HELM_RELEASE) \
 				 --namespace $(KUBE_NAMESPACE) \
 	             --tiller-namespace $(KUBE_NAMESPACE) \
-	             --wait chart/ \
 	             --set display="$(DISPLAY)" \
 	             --set xauthority="$(XAUTHORITY)" \
-	             --set tangoexample.debug="$(REMOTE_DEBUG)"
+	             --set tangoexample.debug="$(REMOTE_DEBUG)" | kubectl -n $(KUBE_NAMESPACE) apply -f -
 
 show: ## show the helm chart
 	@helm template chart/ --name $(HELM_RELEASE) \
@@ -76,12 +65,20 @@ show: ## show the helm chart
 	             --set xauthority="$(XAUTHORITY)" \
 	             --set tangoexample.debug="$(REMOTE_DEBUG)"
 
-ls: ## list the helm chart releases
-	@helm ls --tiller-namespace $(KUBE_NAMESPACE)
-
 delete: ## delete the helm chart release
-	@helm delete --tiller-namespace $(KUBE_NAMESPACE) \
-	      $(HELM_RELEASE) --purge
+	@helm template chart/ --name $(HELM_RELEASE) \
+				 --namespace $(KUBE_NAMESPACE) \
+	             --tiller-namespace $(KUBE_NAMESPACE) \
+	             --set display="$(DISPLAY)" \
+	             --set xauthority="$(XAUTHORITY)" \
+	             --set tangoexample.debug="$(REMOTE_DEBUG)" | kubectl -n $(KUBE_NAMESPACE) delete -f -
+
+poddescribe: ## describe Pods executed from Helm chart
+	@for i in `kubectl -n $(KUBE_NAMESPACE) get pods -l release=$(HELM_RELEASE) -o=name`; \
+	do echo "-------------------"; \
+	echo "Describe for $$i"; \
+	kubectl -n $(KUBE_NAMESPACE) describe $$i; \
+	done
 
 podlogs: ## show Helm chart POD logs
 	@for i in `kubectl -n $(KUBE_NAMESPACE) get pods -l release=$(HELM_RELEASE) -o=name`; \
@@ -92,3 +89,4 @@ podlogs: ## show Helm chart POD logs
 
 help:   ## show this help.
 	@grep -E '^[0-9a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+

@@ -62,7 +62,7 @@ spec:
 {{- with .Values.tangoexample.env }}
 {{ toYaml . | indent 4 }}
 {{- end }}
-restartPolicy: Always
+  restartPolicy: Always
 {{- with .Values.nodeSelector }}
   nodeSelector:
 {{ toYaml . | indent 4 }}

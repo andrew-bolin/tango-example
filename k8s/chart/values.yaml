@@ -8,7 +8,7 @@ xauthority: "~/.Xauthority"
 tangodb:
   enabled: true
   image:
-    registry: ska-registry.av.it.pt/ska-docker
+    registry: nexus.engageska-portugal.pt/ska-docker
     image: tango-db
     tag: latest
     pullPolicy: IfNotPresent
@@ -19,25 +19,25 @@ tangodb:
     password: tango
   resources:
     requests:
-    cpu: 200m     # 200m = 0.2 CPU
-    memory: 256Mi # 256Mi = 0.25 GB mem
+      cpu: 200m     # 200m = 0.2 CPU
+      memory: 256Mi # 256Mi = 0.25 GB mem
 
 databaseds:
   enabled: true
   image:
-    registry: ska-registry.av.it.pt/ska-docker
+    registry: nexus.engageska-portugal.pt/ska-docker
     image: tango-cpp
     tag: latest
     pullPolicy: IfNotPresent
   resources:
     requests:
-    cpu: 200m     # 200m = 0.2 CPU
-    memory: 256Mi # 256Mi = 0.25 GB mem
+      cpu: 200m     # 200m = 0.2 CPU
+      memory: 256Mi # 256Mi = 0.25 GB mem
 
 itango:
   enabled: false
   image:
-    registry: ska-registry.av.it.pt/ska-docker
+    registry: nexus.engageska-portugal.pt/ska-docker
     image: tango-itango
     tag: latest
     pullPolicy: IfNotPresent
@@ -45,7 +45,7 @@ itango:
 tangorest:
   enabled: false
   image:
-    registry: ska-registry.av.it.pt/ska-docker
+    registry: nexus.engageska-portugal.pt/ska-docker
     image: tango-rest
     tag: latest
     pullPolicy: IfNotPresent
@@ -53,7 +53,7 @@ tangorest:
 tangotest:
   enabled: false
   image:
-    registry: ska-registry.av.it.pt/ska-docker
+    registry: nexus.engageska-portugal.pt/ska-docker
     image: tango-java
     tag: latest
     pullPolicy: IfNotPresent
@@ -61,7 +61,7 @@ tangotest:
 astor:
   enabled: true
   image:
-    registry: ska-registry.av.it.pt/ska-docker
+    registry: nexus.engageska-portugal.pt/ska-docker
     image: tango-java
     tag: latest
     pullPolicy: IfNotPresent
@@ -69,7 +69,7 @@ astor:
 starterexample:
   enabled: false
   image:
-    registry: ska-registry.av.it.pt/ska-docker
+    registry: nexus.engageska-portugal.pt/ska-docker
     image: tango-starter
     tag: latest
     pullPolicy: IfNotPresent
@@ -77,7 +77,7 @@ starterexample:
 jive:
   enabled: false
   image:
-    registry: ska-registry.av.it.pt/ska-docker
+    registry: nexus.engageska-portugal.pt/ska-docker
     image: tango-java
     tag: latest
     pullPolicy: IfNotPresent
@@ -85,7 +85,7 @@ jive:
 logviewer:
   enabled: false
   image:
-    registry: ska-registry.av.it.pt/ska-docker
+    registry: nexus.engageska-portugal.pt/ska-docker
     image: tango-java
     tag: latest
     pullPolicy: IfNotPresent
@@ -93,7 +93,7 @@ logviewer:
 pogo:
   enabled: false
   image:
-    registry: ska-registry.av.it.pt/ska-docker
+    registry: nexus.engageska-portugal.pt/ska-docker
     image: tango-pogo
     tag: latest
     pullPolicy: IfNotPresent
@@ -103,7 +103,7 @@ tangoexample:
   debug: false
   debugPort: 32678
   image:
-    registry: ska-registry.av.it.pt/tango-example
+    registry: nexus.engageska-portugal.pt/tango-example
     image: powersupply
     tag: latest
     pullPolicy: IfNotPresent

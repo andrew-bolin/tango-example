@@ -75,7 +75,7 @@ coredns-86c58d9df4-5ztg8           1/1     Running   0          3m24s
 Helm Chart
 ----------
 
-The Helm Chart based install of the Tango Examples relies on [Helm](https://docs.helm.sh/using_helm/#installing-helm) (surprise!).  The easiest way is using the install script:
+The Helm Chart based install of the Tango Examples relies on [Helm](https://docs.helm.sh/using_helm/#installing-helm) (surprise!).  The easiest way to install is using the install script:
 ```
 https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash
 ```
@@ -95,41 +95,19 @@ sudo rm -rf /var/lib/kubeadm.yaml /data/minikube /var/lib/minikube /var/lib/kube
 Running the Tango Examples on Kubernetes
 ----------------------------------------
 
-Once Helm is up and running (from above), change to the k8s/ directory.  The basic configuration for each component of the Tango Example is held in the `values.yaml` file.
-
-Firstly, we need to initialise Helm (the Tiller component) in the namespace that we wish to use:
-
+Note: your Xserver needs to allow TCP connections.  This will be different for each window manager, but on Ubuntu 18.04 using gdm3 it can be enabled by editing /etc/gdm3/custom.conf and adding:
 ```
-$ make launch-tiller KUBE_NAMESPACE=test
-kubectl describe namespace test || kubectl create namespace test
-Error from server (NotFound): namespaces "test" not found
-namespace/test created
-KUBE_NAMESPACE=test \
- envsubst < tiller-acls.yml | kubectl apply -n test -f -
-serviceaccount/tiller created
-clusterrolebinding.rbac.authorization.k8s.io/tiller created
-helm init --service-account tiller \
-  --tiller-namespace test \
-  --upgrade
-$HELM_HOME has been configured at /home/piers/.helm.
-
-Tiller (the Helm server-side component) has been installed into your Kubernetes Cluster.
-
-Please note: by default, Tiller is deployed with an insecure 'allow unauthenticated users' policy.
-To prevent this, run `helm init` with the --tiller-tls-verify flag.
-For more information on securing your installation see: https://docs.helm.sh/using_helm/#securing-your-helm-installation
-Happy Helming!
-
+[security]
+DisallowTCP=false
 ```
+In order for these changes to take effect you will need to restart X (it's just easier to reboot...).
 
-Check that Helm is running happily with:
-```
-$ kubectl get deployment -n test
-NAME            READY   UP-TO-DATE   AVAILABLE   AGE
-tiller-deploy   1/1     1            1           50s
-```
 
-Now for the main event - we launch the Tango Example with:
+Once the Helm client is installed (from above) and TCP based Xserver connections are enabled, change to the k8s/ directory.  The basic configuration for each component of the Tango Example is held in the `values.yaml` file.
+
+The mode that we are using Helm in here is purely for templating - this avoids the need to install the Tiller process on the Kubernetes cluster, and we don't need to be concerend about making it secure (requires TLS and the setup of a CA).
+
+On for the main event - we launch the Tango Example with:
 ```
 $ make deploy KUBE_NAMESPACE=test
 ```
