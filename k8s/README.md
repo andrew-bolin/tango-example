@@ -77,7 +77,7 @@ Helm Chart
 
 The Helm Chart based install of the Tango Examples relies on [Helm](https://docs.helm.sh/using_helm/#installing-helm) (surprise!).  The easiest way to install is using the install script:
 ```
-https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash
+curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash
 ```
 
 Cleaning Up
