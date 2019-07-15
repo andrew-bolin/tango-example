@@ -14,41 +14,6 @@
                 }
             }
         }, 
-        "Motor": {
-            "test": {
-                "Motor": {
-                    "test/motor/1": {
-                        "attribute_properties": {
-                            "PerformanceValue": {
-                                "rel_change": [
-                                    "-1", 
-                                    "1"
-                                ]
-                            }
-                        }, 
-                        "properties": {
-                            "polled_attr": [
-                                "PerformanceValue",
-                                "1000"
-                            ]
-                        }
-                    }
-                }
-            }
-        }, 
-        "PowerSupply": {
-            "test": {
-                "PowerSupply": {
-                    "test/power_supply/1": {
-                        "properties": {
-                            "test": [
-                                "test2"
-                            ]
-                        }
-                    }
-                }
-            }
-        }, 
         "TangoAccessControl": {
             "1": {
                 "TangoAccessControl": {
@@ -62,6 +27,14 @@
                     "sys/tg_test/1": {}
                 }
             }
-        }
+        },
+	"AndrewDev": {
+            "test": {
+                "AndrewDev": {
+                    "a/b/c": {}
+                }
+            }
+	}
+        
     }
 }
