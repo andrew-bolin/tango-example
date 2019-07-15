@@ -5,8 +5,8 @@
 
 import time
 
-import numpy
-from tango import AttrQuality, AttrWriteType, DispLevel, DevState, DebugIt  # GreenMode
+#import numpy
+from tango import AttrQuality, AttrWriteType, DispLevel, DevState #, DebugIt  # GreenMode
 from tango.server import Device, attribute, command, device_property
 
 
@@ -29,13 +29,18 @@ class AndrewDev(Device):
                         min_value=0.0, max_value=8.5,
                         min_alarm=0.1, max_alarm=8.4,
                         min_warning=0.5, max_warning=8.0,
+                        abs_change=0.01,
                         fget="get_current",
                         fset="set_current",
-                        doc="output current aaaaaa")
+                        doc="output current")
 
-    noise = attribute(label="Noise",
-                      dtype=((int,),),
-                      max_dim_x=1024, max_dim_y=1024)
+    temperature = attribute(label="Temperature", dtype=int,
+                        display_level=DispLevel.EXPERT,
+                        access=AttrWriteType.READ,
+                        unit="°C", format="4.2f",
+                        display_unit=0.1, # tells UI to divide by 10
+                        abs_change=50,
+                        doc="internal temperature")
 
     host = device_property(dtype=str)
     port = device_property(dtype=int, default_value=9788)
@@ -43,6 +48,7 @@ class AndrewDev(Device):
     def __init__(self, device_class, device_name):
         super().__init__(device_class, device_name)
         self.__current = 0.0
+        self.__temperature = 200
 
     def init_device(self):
         """Initialise device"""
@@ -62,17 +68,19 @@ class AndrewDev(Device):
     def set_current(self, current):
         """Set the current"""
         self.__current = current
+        # very coarse thermal loss simulation
+        self.__temperature = 200 + (current**2)*10
 
-    def read_info(self):
-        """Get device information"""
-        return 'Information', dict(manufacturer='Andrew',
-                                   model='PSU001',
-                                   version_number=1)
+    def read_temperature(self):
+        """Read internal temperature"""
+        return self.__temperature
 
-    @DebugIt()
-    def read_noise(self):
-        """Get a matrix of random noise"""
-        return numpy.random.random_integers(1000, size=(100, 100))
+#    def read_info(self):
+#        """Get device information"""
+#        return 'Information', dict(manufacturer='Andrew',
+#                                   model='PSU001',
+#                                   version_number=1)
+# ### can't see this anywhere on the GUI - is it used anywhere? ??
 
     @command
     def turn_on(self):
