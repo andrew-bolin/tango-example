@@ -8,8 +8,6 @@ from tango.test_utils import DeviceTestContext
 
 from andrewdev.andrewdev import AndrewDev
 
-
-
 def test_init():
     """Test device goes into STANDBY when initialised"""
     with DeviceTestContext(AndrewDev, process=True) as proxy:
@@ -58,3 +56,11 @@ def test_set_current():
         assert proxy.current == 5.0
         proxy.current = 3.0
         assert proxy.current == 3.0
+
+def test_temperature_is_200_at_init():
+    """Test device sets temperature to 200 when initialised"""
+    with DeviceTestContext(AndrewDev, process=True) as proxy:
+        proxy.Init()
+        # TODO use scale factor reported by object, not the hard-coded 10
+        # we scale and round here because the object simulates noise
+        assert round(proxy.temperature/10) == 20

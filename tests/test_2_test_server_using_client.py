@@ -17,6 +17,7 @@ def andrew_dev():
             return tango.DeviceProxy(instance)
         except tango.DevFailed:
             continue
+    pytest.fail('failed to create proxy')
 
 
 def test_andrew_dev_is_alive(andrew_dev):
@@ -58,9 +59,18 @@ def test_current_is_zero_at_init(andrew_dev):
     assert andrew_dev.current == 0
 
 
-def set_current(andrew_dev):
+def test_set_current(andrew_dev):
     """Test device sets current on request"""
     andrew_dev.current = 5.0
     assert andrew_dev.current == 5.0
     andrew_dev.current = 3.0
     assert andrew_dev.current == 3.0
+
+def test_temperature_proportional_to_current(andrew_dev):
+    """Tests thermal simulation"""
+    andrew_dev.current = 0.0
+    for i in range(10):
+        assert round(andrew_dev.temperature/10) == 20
+    andrew_dev.current = 7.0
+    for i in range(10):
+        assert round(andrew_dev.temperature/10) == 69
