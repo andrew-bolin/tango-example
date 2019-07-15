@@ -22,11 +22,12 @@ endif
 RELEASE_SUPPORT := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))/.make-release-support
 
 ifeq ($(strip $(DOCKER_REGISTRY_HOST)),)
-  DOCKER_REGISTRY_HOST = nexus.engageska-portugal.pt
+#  DOCKER_REGISTRY_HOST = nexus.engageska-portugal.pt
+DOCKER_REGISTRY_HOST = 172.16.0.1:5000
 endif
 
 ifeq ($(strip $(DOCKER_REGISTRY_USER)),)
-  DOCKER_REGISTRY_USER = tango-example
+  DOCKER_REGISTRY_USER = docker_user_mk
 endif
 
 IMAGE=$(DOCKER_REGISTRY_HOST)/$(DOCKER_REGISTRY_USER)/$(NAME)

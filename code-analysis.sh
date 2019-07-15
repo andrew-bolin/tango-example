@@ -5,7 +5,7 @@ echo
 
 echo "MODULE ANALYSIS"
 echo "---------------"
-pylint powersupply
+pylint andrewdev
 
 echo "TESTS ANALYSIS"
 echo "--------------"

@@ -77,39 +77,14 @@ services:
     volumes:
       - .:/tango-example
 
-  powersupply:
-    image: ${DOCKER_REGISTRY_HOST}/${DOCKER_REGISTRY_USER}/tango-example:latest
+  andrewdev:
+    image: ${DOCKER_REGISTRY_HOST}/${DOCKER_REGISTRY_USER}/andrew-experimental:latest
     network_mode: ${NETWORK_MODE}
-    container_name: ${CONTAINER_NAME_PREFIX}powersupply
+    container_name: ${CONTAINER_NAME_PREFIX}andrewdev
     depends_on:
       - dsconfig
     environment:
       - TANGO_HOST=${TANGO_HOST}
     command: >
       sh -c "wait-for-it.sh ${TANGO_HOST} --timeout=30 --strict --
-             /venv/bin/python /app/powersupply/powersupply.py test"
-
-  motor:
-    image: ${DOCKER_REGISTRY_HOST}/${DOCKER_REGISTRY_USER}/tango-example:latest
-    network_mode: ${NETWORK_MODE}
-    container_name: ${CONTAINER_NAME_PREFIX}motor
-    depends_on:
-      - dsconfig
-    environment:
-      - TANGO_HOST=${TANGO_HOST}
-    command: >
-      sh -c "wait-for-it.sh ${TANGO_HOST} --timeout=30 --strict --
-             /venv/bin/python /app/Motor/Motor.py test"
-
-  eventreceiver:
-    image: ${DOCKER_REGISTRY_HOST}/${DOCKER_REGISTRY_USER}/tango-example:latest
-    network_mode: ${NETWORK_MODE}
-    container_name: ${CONTAINER_NAME_PREFIX}eventreceiver
-    depends_on:
-      - dsconfig
-      - motor
-    environment:
-      - TANGO_HOST=${TANGO_HOST}
-    command: >
-      sh -c "wait-for-it.sh ${TANGO_HOST} --timeout=30 --strict --
-             /venv/bin/python /app/EventReceiver/EventReceiver.py test"
+             /venv/bin/python /app/andrewdev/andrewdev.py aaa_001"

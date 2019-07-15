@@ -7,15 +7,15 @@ with open('README.md') as readme_file:
     readme = readme_file.read()
 
 setup(
-    name='powersupply',
+    name='andrewdev',
     version='0.0.0',
     description="",
     long_description=readme + '\n\n',
-    author="Your Name",
-    author_email='stewart.williams@stfc.ac.uk',
-    url='https://github.com/ska-telescope/tango-example',
+    author="Andrew",
+    author_email='',
+    url='https://github.com/andrew-bolin/tango-example',
     packages=[
-        'powersupply', 'Motor', 'EventReceiver'
+        'andrewdev' #, 'Motor', 'EventReceiver'
     ],
     include_package_data=True,
     license="BSD license",
