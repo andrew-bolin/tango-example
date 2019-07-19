@@ -53,6 +53,7 @@ def test_turn_off(andrew_dev):
 
 def test_current_is_zero_at_init(andrew_dev):
     """Test device sets current to 0 when initialised"""
+    andrew_dev.turn_on()
     andrew_dev.current = 5
     assert andrew_dev.current != 0
     andrew_dev.Init()
@@ -60,17 +61,22 @@ def test_current_is_zero_at_init(andrew_dev):
 
 
 def test_set_current(andrew_dev):
-    """Test device sets current on request"""
+    """Test device sets current when in on state"""
+    andrew_dev.Init()
     andrew_dev.current = 5.0
+    assert andrew_dev.current == 0
+    andrew_dev.turn_on()
     assert andrew_dev.current == 5.0
     andrew_dev.current = 3.0
     assert andrew_dev.current == 3.0
 
 def test_temperature_proportional_to_current(andrew_dev):
     """Tests thermal simulation"""
-    andrew_dev.current = 0.0
-    for i in range(10):
-        assert round(andrew_dev.temperature/10) == 20
-    andrew_dev.current = 7.0
-    for i in range(10):
-        assert round(andrew_dev.temperature/10) == 69
+    andrew_dev.Init()
+    andrew_dev.turn_on()
+    scale = float(andrew_dev.attribute_query('temperature').display_unit)
+    for _ in range(10):
+        assert round(andrew_dev.temperature * scale) == 20
+    andrew_dev.current = 7.0 # expect 20 + 7^2
+    for _ in range(10):
+        assert round(andrew_dev.temperature * scale) == 69

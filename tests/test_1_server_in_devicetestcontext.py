@@ -38,6 +38,7 @@ def test_current_is_zero_at_init():
     """Test device sets current to 0 when initialised"""
     with DeviceTestContext(AndrewDev, process=True) as proxy:
         proxy.Init()
+        proxy.turn_on()
         proxy.current = 5
         assert proxy.current != 0
         proxy.Init()
@@ -50,9 +51,12 @@ def test_voltage_is_240():
         assert proxy.voltage == 240
 
 def test_set_current():
-    """Test device sets current on request"""
+    """Test device sets current when turned on"""
     with DeviceTestContext(AndrewDev, process=True) as proxy:
+        proxy.Init()
         proxy.current = 5.0
+        assert proxy.current == 0
+        proxy.turn_on()
         assert proxy.current == 5.0
         proxy.current = 3.0
         assert proxy.current == 3.0
@@ -61,6 +65,6 @@ def test_temperature_is_200_at_init():
     """Test device sets temperature to 200 when initialised"""
     with DeviceTestContext(AndrewDev, process=True) as proxy:
         proxy.Init()
-        # TODO use scale factor reported by object, not the hard-coded 10
+        scale = float(proxy.attribute_query('temperature').display_unit)
         # we scale and round here because the object simulates noise
-        assert round(proxy.temperature/10) == 20
+        assert round(proxy.temperature * scale) == 20

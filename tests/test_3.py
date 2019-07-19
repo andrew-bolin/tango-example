@@ -12,13 +12,19 @@ def test_stuff():
     with DeviceTestContext(AndrewDev, process=False) as proxy:
         proxy.Init()
         assert proxy.current == 0
-        assert round(proxy.temperature/10) == 20
+        scale = float(proxy.attribute_query('temperature').display_unit)
+        assert round(proxy.temperature * scale) == 20
         assert proxy.state() == DevState.STANDBY
         proxy.current = 4
-        assert proxy.current == 4
-        # note, need current to be set in range to avoid alarm
+        assert proxy.current == 0
+        assert round(proxy.temperature * scale) == 20
         proxy.turn_on()
-        assert proxy.state() == DevState.ON 
+        assert proxy.current == 4
+        assert round(proxy.temperature * scale) == 36
+        proxy.ramp(3)
+        assert proxy.current == 3
+        # note, need current to be set in range to avoid alarm
+        assert proxy.state() == DevState.ON
         proxy.turn_off()
-        assert proxy.state() == DevState.OFF 
+        assert proxy.state() == DevState.OFF
         assert proxy.voltage == 240
