@@ -68,8 +68,14 @@ class AndrewDev(Device):
     def set_current(self, current):
         """Set the current"""
         self.__current = current
+
+    def always_executed_hook(self):
+        """Runs before every command"""
         # very coarse thermal loss simulation
-        self.__temperature = 200 + (current**2)*10
+        if(self.get_state() in [DevState.STANDBY, DevState.OFF]):
+            self.__temperature = 200
+        else:
+            self.__temperature = 200 + (self.__current**2)*10
 
     def read_temperature(self):
         """Read internal temperature"""
