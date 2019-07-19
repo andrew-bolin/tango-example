@@ -63,46 +63,38 @@ class AndrewDev(Device):
 
     def get_current(self):
         """Get the current"""
+        if self.get_state() in (DevState.STANDBY, DevState.OFF):
+            return 0
         return self.__current
 
     def set_current(self, current):
         """Set the current"""
         self.__current = current
 
-    def always_executed_hook(self):
-        """Runs before every command"""
+    def read_temperature(self):
+        """Read internal temperature"""
         # very coarse thermal loss simulation
-        if(self.get_state() in [DevState.STANDBY, DevState.OFF]):
+        if self.get_state() in (DevState.STANDBY, DevState.OFF):
             self.__temperature = 200
         else:
             self.__temperature = 200 + (self.__current**2)*10
-
-    def read_temperature(self):
-        """Read internal temperature"""
-        return self.__temperature + randint(-4,4)
-
-    def coverage_accuracy_check(self):
-        """Not used, just checking if pytest-cov is doing the right thing"""
-        return self.__temperature
-
-#    def read_info(self):
-#        """Get device information"""
-#        return 'Information', dict(manufacturer='Andrew',
-#                                   model='PSU001',
-#                                   version_number=1)
-# ### can't see this anywhere on the GUI - is it used anywhere? ??
+        return self.__temperature + randint(-4, 4)
 
     @command
     def turn_on(self):
         """Turn the device on"""
         # turn on the actual power supply here
         self.set_state(DevState.ON)
+        self.push_change_event('temperature', self.__temperature)
+        self.push_change_event('current', self.__current)
 
     @command
     def turn_off(self):
         """Turn the device off"""
         # turn off the actual power supply here
         self.set_state(DevState.OFF)
+        self.push_change_event('temperature', self.__temperature)
+        self.push_change_event('current', self.__current)
 
     @command(dtype_in=float, doc_in="Ramp target current",
              dtype_out=bool, doc_out="True if ramping went well, "
