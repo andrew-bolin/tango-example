@@ -7,13 +7,6 @@
                 }
             }
         }, 
-        "EventReceiver": {
-            "test": {
-                "EventReceiver": {
-                    "test/eventreceiver/1": {}
-                }
-            }
-        }, 
         "TangoAccessControl": {
             "1": {
                 "TangoAccessControl": {
