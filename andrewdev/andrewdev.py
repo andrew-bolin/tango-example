@@ -100,7 +100,7 @@ class AndrewDev(Device):
              dtype_out=bool, doc_out="True if ramping went well, "
                                      "False otherwise")
     def ramp(self, target_current):
-        """Ramp voltage to the target current"""
+        """Ramp output to the target current"""
         # should do the ramping. This doesn't.
         self.set_current(target_current)
         return True
