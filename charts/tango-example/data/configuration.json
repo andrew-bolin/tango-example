@@ -21,10 +21,10 @@
                 }
             }
         },
-	"AndrewDev": {
+	"AndrewDevPogo": {
             "test": {
-                "AndrewDev": {
-                    "a/b/c": {}
+                "AndrewDevPogo": {
+                    "a/b/pogo": {}
                 }
             }
 	}
