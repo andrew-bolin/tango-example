@@ -7,7 +7,7 @@ with open('README.md') as readme_file:
     readme = readme_file.read()
 
 setup(
-    name='andrewdev',
+    name='AndrewDevPogo',
     version='0.0.0',
     description="",
     long_description=readme + '\n\n',
@@ -15,7 +15,7 @@ setup(
     author_email='',
     url='https://github.com/andrew-bolin/tango-example',
     packages=[
-        'andrewdev' #, 'Motor', 'EventReceiver'
+        'AndrewDevPogo' #, 'Motor', 'EventReceiver'
     ],
     include_package_data=True,
     license="BSD license",

@@ -11,7 +11,7 @@
 # nexus.engageska-portugal.pt/tango-example/powersupply
 #
 DOCKER_REGISTRY_USER:=andrew-experimental
-PROJECT = andrew-experimental
+PROJECT = andrew-experimental-pogo
 DSCONFIG_JSON_FILE ?= tango-example/charts/tango-example/data/configuration.json
 
 

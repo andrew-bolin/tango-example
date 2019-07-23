@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Some simple unit tests of the AndrewDev device, exercising the device from
+Some simple unit tests of the AndrewDevPogo device, exercising the device from
 another host using a DeviceProxy.
 """
 import pytest
@@ -11,7 +11,7 @@ import tango
 def andrew_dev():
     """Create DeviceProxy for tests"""
     database = tango.Database()
-    instance_list = database.get_device_exported_for_class('AndrewDev')
+    instance_list = database.get_device_exported_for_class('AndrewDevPogo')
     for instance in instance_list.value_string:
         try:
             return tango.DeviceProxy(instance)
@@ -59,6 +59,9 @@ def test_current_is_zero_at_init(andrew_dev):
     andrew_dev.Init()
     assert andrew_dev.current == 0
 
+def test_voltage_is_240(andrew_dev):
+    """Test device has hard-coded voltage of 240"""
+    assert andrew_dev.voltage == 240
 
 def test_set_current(andrew_dev):
     """Test device sets current when in on state"""
@@ -70,13 +73,20 @@ def test_set_current(andrew_dev):
     andrew_dev.current = 3.0
     assert andrew_dev.current == 3.0
 
-def test_temperature_proportional_to_current(andrew_dev):
-    """Tests thermal simulation"""
+def test_temperature_is_200_at_init(andrew_dev):
+    """Test device sets temperature to 200 when initialised"""
     andrew_dev.Init()
-    andrew_dev.turn_on()
     scale = float(andrew_dev.attribute_query('temperature').display_unit)
-    for _ in range(10):
-        assert round(andrew_dev.temperature * scale) == 20
-    andrew_dev.current = 7.0 # expect 20 + 7^2
-    for _ in range(10):
-        assert round(andrew_dev.temperature * scale) == 69
+    # we scale and round here because the object simulates noise
+    assert round(andrew_dev.temperature * scale) == 20
+
+#def test_temperature_proportional_to_current(andrew_dev):
+#    """Tests thermal simulation"""
+#    andrew_dev.Init()
+#    andrew_dev.turn_on()
+#    scale = float(andrew_dev.attribute_query('temperature').display_unit)
+#    for _ in range(10):
+#        assert round(andrew_dev.temperature * scale) == 20
+#    andrew_dev.current = 7.0 # expect 20 + 7^2
+#    for _ in range(10):
+#        assert round(andrew_dev.temperature * scale) == 69
